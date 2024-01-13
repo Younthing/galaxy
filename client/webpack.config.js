@@ -48,6 +48,7 @@ module.exports = (env = {}, argv = {}) => {
 
     const buildconfig = {
         mode: targetEnv,
+        target: "web",
         entry: {
             analysis: ["polyfills", "bundleEntries", "entry/analysis"],
             generic: ["polyfills", "bundleEntries", "entry/generic"],
@@ -196,6 +197,10 @@ module.exports = (env = {}, argv = {}) => {
                     test: /\.(txt|tmpl)$/,
                     loader: "raw-loader",
                 },
+                {
+                    test: /\.ya?ml$/,
+                    use: "yaml-loader",
+                },
             ],
         },
         resolveLoader: {
@@ -228,6 +233,9 @@ module.exports = (env = {}, argv = {}) => {
                 filename: "[name].css",
             }),
             new DuplicatePackageCheckerPlugin(),
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, "./public/index.html"),
+            }),
             new DumpMetaPlugin({
                 filename: path.join(__dirname, "../lib/galaxy/web/framework/meta.json"),
                 prepare: (stats) => ({
@@ -254,7 +262,7 @@ module.exports = (env = {}, argv = {}) => {
             },
             hot: true,
             port: process.env.WEBPACK_PORT || 8081,
-            host: "0.0.0.0",
+            host: "127.0.0.1",
             // proxy *everything* to the galaxy server.
             // someday, when we have a fully API-driven independent client, this
             // can be a more limited set -- e.g. `/api`, `/auth`
