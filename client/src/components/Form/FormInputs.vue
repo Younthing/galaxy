@@ -155,8 +155,6 @@ export default {
                     } else {
                         itemArr.push(input);
                     }
-
-                    console.log("in", input);
                 });
             itemArr.sort((i) => (["data", "conditional", "rules"].includes(i?.type) ? 1 : -1));
             return itemArr.concat(rowItemArr);
