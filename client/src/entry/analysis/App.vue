@@ -2,6 +2,7 @@
     <div id="app" :style="theme">
         <div id="everything">
             <div id="background" />
+            <!-- 导航菜单 -->
             <Masthead
                 v-if="showMasthead"
                 id="masthead"
@@ -190,6 +191,7 @@ export default {
             const notificationsStore = useNotificationsStore();
             notificationsStore.startPollingNotifications();
         },
+        // 导航菜单事件
         openUrl(urlObj) {
             if (!urlObj.target) {
                 this.$router.push(urlObj.url);

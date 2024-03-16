@@ -1,6 +1,7 @@
 import { toValue } from "@vueuse/core";
 import { onScopeDispose, ref, watch } from "vue";
 
+// 浏览器 Worker进行filter数据
 export function useFilterObjectArray(array, filter, objectFields, asRegex = false) {
     const worker = new Worker(new URL("./filter.worker.js", import.meta.url));
 

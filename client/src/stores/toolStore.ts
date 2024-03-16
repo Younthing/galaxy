@@ -10,6 +10,7 @@ import { createWhooshQuery, filterTools, types_to_icons } from "@/components/Pan
 import { useUserLocalStorage } from "@/composables/userLocalStorage";
 import { getAppRoot } from "@/onload/loadConfig";
 import { rethrowSimple } from "@/utils/simple-error";
+import { transformToolPanelView } from "@/utils/convert";
 
 export interface Tool {
     model_class: string;
@@ -40,8 +41,9 @@ export interface ToolSection {
     version?: string;
     description?: string;
     links?: Record<string, string>;
-    tools?: (string | ToolSectionLabel)[];
+    tools?: (string | ToolSectionLabel | ToolSection)[];
     elems?: (Tool | ToolSection)[];
+    _parent_id?: string;
 }
 
 export interface ToolSectionLabel {
@@ -209,7 +211,8 @@ export const useToolStore = defineStore("toolStore", () => {
                 .get(`${getAppRoot()}api/tool_panels/${panelView}`)
                 .then(({ data }) => {
                     loading.value = false;
-                    savePanelView(panelView, data);
+                    const newData = transformToolPanelView(data);
+                    savePanelView(panelView, newData);
                 })
                 .catch(async (error) => {
                     loading.value = false;

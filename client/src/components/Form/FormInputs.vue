@@ -1,6 +1,10 @@
 <template>
-    <div>
-        <div v-for="(input, index) in inputs" :key="index">
+    <div :class="className">
+        <div
+            v-for="(input, index) in transformInputs"
+            :key="index"
+            :class="input.model_class?.includes('row-item') && 'row-item'">
+            <span>{{ input.type }}-{{ input.model_class }}</span>
             <div v-if="input.type == 'conditional'" class="ui-portlet-section mt-3">
                 <div class="portlet-header">
                     <b>{{ input.test_param.label || input.test_param.name }}</b>
@@ -81,6 +85,10 @@ export default {
         FormRepeat,
     },
     props: {
+        className: {
+            type: String,
+            default: "",
+        },
         inputs: {
             type: Array,
             default: null,
@@ -130,6 +138,30 @@ export default {
             default: false,
         },
     },
+    computed: {
+        transformInputs() {
+            const itemArr = [];
+            const rowItemArr = [];
+            const inputLength = this.inputs.length;
+            this.inputs
+                .filter((i) => i.type !== "hidden")
+                .forEach((input, index) => {
+                    if (
+                        (index === inputLength - 1 && inputLength % 2 !== 0) ||
+                        (input.type === "repeat" && input?.inputs?.length > 2)
+                    ) {
+                        input.model_class += "row-item";
+                        rowItemArr.push(input);
+                    } else {
+                        itemArr.push(input);
+                    }
+
+                    console.log("in", input);
+                });
+            itemArr.sort((i) => (["data", "conditional", "rules"].includes(i?.type) ? 1 : -1));
+            return itemArr.concat(rowItemArr);
+        },
+    },
     methods: {
         getPrefix(name, index) {
             if (this.prefix) {
@@ -168,3 +200,8 @@ export default {
     },
 };
 </script>
+<style lang="scss" scoped>
+.row-item {
+    width: 100% !important;
+}
+</style>

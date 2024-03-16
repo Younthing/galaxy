@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useEventBus } from "@vueuse/core";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
@@ -78,11 +79,13 @@ const elems = computed(() => {
     return [];
 });
 
-const name = computed(() => props.category.title || props.category.name);
+const name = computed(() => props.category.title || props.category.name || props.category.text);
 const isSection = computed(() => props.category.tools !== undefined || props.category.elems !== undefined);
 const hasElements = computed(() => elems.value.length > 0);
 const title = computed(() => props.category.description);
 const links = computed(() => props.category.links || {});
+const isLabel = computed(() => props.category.model_class === "ToolSectionLabel");
+const isLabelMenu = computed(() => isLabel.value && isSection);
 
 const opened = ref(props.expanded || checkFilter());
 
@@ -166,32 +169,37 @@ function toggleMenu(nextState = !opened.value) {
             v-b-tooltip.topright.hover.noninteractive
             :class="['toolSectionTitle', `tool-menu-section-${sectionName}`]"
             :title="title">
-            <a class="title-link" href="javascript:void(0)" @click="toggleMenu()">
-                <span class="name">
-                    {{ name }}
-                </span>
-                <ToolPanelLinks :links="links" />
+            <a :class="['title-link', 'row-title']" href="javascript:void(0)" @click="toggleMenu()">
+                <span class="name"> {{ name }} </span>
+                <ToolPanelLinks v-if="links" :links="links" />
+                <FontAwesomeIcon
+                    icon="chevron-right"
+                    :class="[opened && 'opened-arrow', props?.category?._parent_id && 'mr-3']" />
             </a>
         </div>
         <transition name="slide">
-            <div v-if="opened" data-description="opened tool panel section">
-                <template v-for="[key, el] in sortedElements">
-                    <ToolPanelLabel
-                        v-if="category.text || el.model_class === 'ToolSectionLabel'"
-                        :key="key"
-                        :definition="el" />
-                    <Tool
-                        v-else
-                        :key="key"
-                        class="ml-2"
-                        :tool="el"
-                        :tool-key="toolKey"
-                        :hide-name="hideName"
-                        :operation-title="operationTitle"
-                        :operation-icon="operationIcon"
-                        @onOperation="onOperation"
+            <div v-if="opened" :class="isLabelMenu && 'ml-3'" data-description="opened tool panel section">
+                <!-- 展开LabelMenu的子菜单 -->
+                <template v-if="isLabelMenu">
+                    <ToolSection
+                        v-for="i in props.category.tools"
+                        :key="i?.id"
+                        :category="i"
+                        :query-filter="props.queryFilter || undefined"
                         @onClick="onClick" />
                 </template>
+                <Tool
+                    v-for="[key, el] in sortedElements"
+                    v-else
+                    :key="key"
+                    class="ml-2"
+                    :tool="el"
+                    :tool-key="toolKey"
+                    :hide-name="hideName"
+                    :operation-title="operationTitle"
+                    :operation-icon="operationIcon"
+                    @onOperation="onOperation"
+                    @onClick="onClick" />
             </div>
         </transition>
     </div>
@@ -211,6 +219,15 @@ function toggleMenu(nextState = !opened.value) {
 <style lang="scss" scoped>
 @import "scss/theme/blue.scss";
 
+.row-title {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.opened-arrow {
+    transform: rotate(90deg);
+}
 .tool-panel-label {
     background: darken($panel-bg-color, 5%);
     border-left: 0.25rem solid darken($panel-bg-color, 25%);

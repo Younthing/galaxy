@@ -45,10 +45,12 @@ GalaxyApp.prototype._init = function (options, bootstrapped) {
 
     this._initUser(options.user || {});
 
+    // 设置系统语言
     _setUserLocale(this.user, this.config);
     _getUserLocale();
     console.debug("currentLocale: ", sessionStorage.getItem("currentLocale"));
 
+    // 监听ajax请求
     this._setUpListeners();
     this.trigger("ready", this);
 
@@ -137,6 +139,7 @@ GalaxyApp.prototype._initUserLocale = function _initUserLocale(options) {
         user_locale = false;
     }
 
+    // 浏览器语言
     const nav_locale =
         typeof navigator === "undefined"
             ? "__root"

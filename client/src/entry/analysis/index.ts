@@ -30,4 +30,5 @@ addInitialization((Galaxy: any) => {
     });
 });
 
+//document load加载时执行globalInits，执行initTooltips、initSentry、onloadWebhooks...
 window.addEventListener("load", () => standardInit("app"));

@@ -40,6 +40,7 @@ onUnmounted(() => {
     <div id="columns" class="d-flex">
         <ActivityBar v-if="showActivityBar" />
         <FlexPanel v-if="showToolbox" side="left">
+            <!-- 侧边工具菜单 -->
             <ToolPanel />
         </FlexPanel>
         <div id="center" class="overflow-auto p-3 w-100">

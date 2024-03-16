@@ -32,6 +32,7 @@ import { config$ } from "./loadConfig";
 export function standardInit(label = "Galaxy", appFactory = defaultAppFactory) {
     // register assortment of random javascript inits
     // which were transplanted from python templates
+    // 执行prependInitialization
     globalInits();
 
     // waits for configs to stop changing then instantiates Galaxy

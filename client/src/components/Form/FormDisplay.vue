@@ -12,7 +12,8 @@
         :collapsed-disable-icon="collapsedDisableIcon"
         :on-change="onChange"
         :on-change-form="onChangeForm"
-        :workflow-building-mode="workflowBuildingMode" />
+        :workflow-building-mode="workflowBuildingMode"
+        class-name="flex-tool-container" />
 </template>
 
 <script>
@@ -253,3 +254,15 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+.flex-tool-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: baseline;
+
+    & > div {
+        width: calc(50% - 10px);
+    }
+}
+</style>

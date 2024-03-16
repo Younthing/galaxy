@@ -1,10 +1,16 @@
 <template>
     <div class="toolTitle">
-        <a v-if="tool.disabled" :data-tool-id="tool.id" class="title-link name text-muted">
+        <a v-if="tool && tool.disabled" :data-tool-id="tool.id" class="title-link name text-muted">
             <span v-if="!hideName">{{ tool.name }}</span>
             <span class="description">{{ tool.description }}</span>
         </a>
-        <a v-else :class="targetClass" :data-tool-id="tool.id" :href="tool.link" :target="tool.target" @click="onClick">
+        <a
+            v-else-if="tool"
+            :class="targetClass"
+            :data-tool-id="tool.id"
+            :href="tool.link"
+            :target="tool.target"
+            @click="onClick">
             <img v-if="tool.logo" class="logo" :src="tool.logo" :alt="tool.name" />
             <span class="labels">
                 <span

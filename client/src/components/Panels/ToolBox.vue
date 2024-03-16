@@ -102,6 +102,7 @@ const localToolsById = computed(() => {
 
 /** `currentPanel` from `toolStore`, except it only has valid tools and sections for `props.workflow` value */
 const localSectionsById = computed(() => {
+    // 全部的tool key
     const validToolIdsInCurrentView = Object.keys(localToolsById.value);
 
     // Looking within each `ToolSection`, and filtering on child elements
@@ -123,6 +124,7 @@ const toolsList = computed(() => Object.values(localToolsById.value));
  * If we have results for search, we show tools in sections or just tools,
  * based on whether `showSections` is true or false
  */
+// localPanel接口返回的侧边菜单数据
 const localPanel: ComputedRef<Record<string, Tool | ToolSectionType> | null> = computed(() => {
     if (hasResults.value) {
         if (showSections.value) {
@@ -135,6 +137,7 @@ const localPanel: ComputedRef<Record<string, Tool | ToolSectionType> | null> = c
     }
 });
 
+// 侧边菜单的Key
 const sectionIds = computed(() => Object.keys(localPanel.value || {}));
 
 const favWorkflows = computed(() => {

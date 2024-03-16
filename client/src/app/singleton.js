@@ -7,6 +7,7 @@ import { serverPath } from "utils/serverPath";
 
 import { GalaxyApp } from "./galaxy";
 
+// 为window设置_galaxyInstance
 export function setGalaxyInstance(factory) {
     if (!config.testBuild === true) {
         console.warn("setGalaxyInstance", serverPath());

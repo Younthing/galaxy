@@ -169,7 +169,11 @@ const { keyObject } = useKeyedObjects();
             </template>
 
             <template v-slot:body>
-                <FormNode v-bind="props.passthroughProps" :inputs="cache" :prefix="getPrefix(cacheId)" />
+                <FormNode
+                    class="flex-tool-container"
+                    v-bind="props.passthroughProps"
+                    :inputs="cache"
+                    :prefix="getPrefix(cacheId)" />
             </template>
         </FormCard>
 
